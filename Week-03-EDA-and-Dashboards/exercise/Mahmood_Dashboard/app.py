@@ -11,7 +11,7 @@ def load_data(uploaded_file=None):
         df = pd.read_csv(uploaded_file)
     else:
         # Fallback to bundled sample data
-        df_path = Path("data/sample_population.csv")
+        df_path = Path('data\sample_population.csv')
         df = pd.read_csv(df_path)
     # Basic cleanups
     df.columns = [c.strip() for c in df.columns]
