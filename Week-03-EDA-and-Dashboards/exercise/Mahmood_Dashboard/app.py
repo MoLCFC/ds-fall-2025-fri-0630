@@ -2,9 +2,9 @@ import streamlit as st
 import pandas as pd
 try:
     import plotly.express as px
-except ModuleNotFoundError:
+except ImportError as e:
     st.error(
-        "Plotly is not installed. Please install with `pip install plotly` or add `plotly` to requirements.")
+        f"Failed to import Plotly: {e}. Install with `pip install plotly` or add `plotly` to requirements.")
     st.stop()
 from pathlib import Path
 from io import StringIO
