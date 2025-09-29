@@ -1,6 +1,11 @@
 import streamlit as st
 import pandas as pd
-import plotly.express as px
+try:
+    import plotly.express as px
+except ModuleNotFoundError:
+    st.error(
+        "Plotly is not installed. Please install with `pip install plotly` or add `plotly` to requirements.")
+    st.stop()
 from pathlib import Path
 from io import StringIO
 import os
@@ -174,3 +179,4 @@ if not fdf.empty and "Country" in fdf.columns and "Year" in fdf.columns:
 # Raw data preview
 with st.expander("Preview Data"):
     st.dataframe(fdf.head(200), width='stretch')
+
