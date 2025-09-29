@@ -79,4 +79,16 @@ st.markdown("---")
 if not fdf.empty and {"Year","Population","Country"}.issubset(fdf.columns):
     fig = px.line(fdf, x="Year", y="Population", color="Country", markers=True,
                   title="Population Over Time")
-    st.plotly_chart(f_
+    st.plotly_chart(fig, use_container_width=True)
+
+# Bar chart: latest year comparison
+if not fdf.empty and "Country" in fdf.columns:
+    latest_year = int(fdf["Year"].max()) if "Year" in fdf.columns and fdf["Year"].notna().any() else None
+    if latest_year is not None:
+        latest_df = fdf[fdf["Year"] == latest_year].sort_values("Population", ascending=False)
+        fig2 = px.bar(latest_df, x="Country", y="Population", title=f"Population by Country (Year {latest_year})")
+        st.plotly_chart(fig2, use_container_width=True)
+
+# Raw data
+with st.expander("Preview Data"):
+    st.dataframe(fdf.head(100), use_container_width=True)
