@@ -3,6 +3,7 @@ import pandas as pd
 import plotly.express as px
 from pathlib import Path
 from io import StringIO
+import os
 
 st.set_page_config(page_title="Population Dashboard", page_icon="📈", layout="wide")
 
@@ -32,8 +33,9 @@ def load_data(uploaded_file=None):
         df = pd.read_csv(uploaded_file)
         return _basic_cleanup(df)
 
-    # 2) If local sample exists, use it.
-    df_path = Path("data/sample_population.csv")
+    # 2) If local sample exists, use it. Resolve relative to this file for robustness.
+    script_dir = Path(os.path.dirname(__file__)).resolve()
+    df_path = (script_dir / "data" / "sample_population.csv")
     if df_path.exists():
         df = pd.read_csv(df_path)
         return _basic_cleanup(df)
@@ -75,7 +77,13 @@ countries = (
     if "Country" in df.columns else []
 )
 if "Year" in df.columns and df["Year"].notna().any():
-    year_min, year_max = int(df["Year"].min()), int(df["Year"].max())
+    # Guard against NaNs in Year when casting to int
+    year_min_val = pd.to_numeric(df["Year"], errors="coerce").min()
+    year_max_val = pd.to_numeric(df["Year"], errors="coerce").max()
+    if pd.notna(year_min_val) and pd.notna(year_max_val):
+        year_min, year_max = int(year_min_val), int(year_max_val)
+    else:
+        year_min = year_max = None
 else:
     year_min = year_max = None
 
@@ -97,7 +105,8 @@ with st.sidebar:
         sel_years = None
 
 # Apply filters
-mask = pd.Series([True] * len(df)) if not df.empty else pd.Series([], dtype=bool)
+# Ensure mask aligns to df.index to avoid index alignment issues
+mask = pd.Series(True, index=df.index) if not df.empty else pd.Series([], dtype=bool)
 if not df.empty:
     if sel_countries and "Country" in df.columns:
         mask &= df["Country"].isin(sel_countries)
@@ -110,15 +119,25 @@ fdf = df[mask].dropna(subset=["Population"]) if not df.empty and "Population" in
 # KPIs
 col1, col2, col3 = st.columns(3)
 if not fdf.empty and "Year" in fdf.columns and "Country" in fdf.columns:
-    latest_year = int(fdf["Year"].max())
-    latest_df = fdf[fdf["Year"] == latest_year]
-    total_pop = latest_df["Population"].sum()
-    n_countries = latest_df["Country"].nunique()
-    avg_pop = latest_df["Population"].mean()
+    # Guard: coerce Year and drop NaNs before max
+    year_series = pd.to_numeric(fdf["Year"], errors="coerce").dropna()
+    if not year_series.empty:
+        latest_year = int(year_series.max())
+    else:
+        latest_year = None
+    if latest_year is not None:
+        latest_df = fdf[pd.to_numeric(fdf["Year"], errors="coerce") == latest_year]
+        total_pop = latest_df["Population"].sum()
+        n_countries = latest_df["Country"].nunique()
+        avg_pop = latest_df["Population"].mean()
 
-    col1.metric("Total Population (latest year)", f"{total_pop:,.0f}")
-    col2.metric("Countries (latest year)", f"{n_countries}")
-    col3.metric("Avg. Population (latest year)", f"{avg_pop:,.0f}")
+        col1.metric("Total Population (latest year)", f"{total_pop:,.0f}")
+        col2.metric("Countries (latest year)", f"{n_countries}")
+        col3.metric("Avg. Population (latest year)", f"{avg_pop:,.0f}")
+    else:
+        col1.write("No valid years in data.")
+        col2.write("")
+        col3.write("")
 else:
     col1.write("No data after filters; adjust selections.")
 
@@ -127,23 +146,31 @@ st.markdown("---")
 
 # Line chart: population over time
 if not fdf.empty and {"Year", "Population", "Country"}.issubset(fdf.columns):
-    fig = px.line(
-        fdf, x="Year", y="Population", color="Country", markers=True,
-        title="Population Over Time"
-    )
-    st.plotly_chart(fig, use_container_width=True)
+    plot_df = fdf.copy()
+    plot_df["Year"] = pd.to_numeric(plot_df["Year"], errors="coerce")
+    plot_df = plot_df.dropna(subset=["Year", "Population"])  # ensure clean plotting
+    if not plot_df.empty:
+        fig = px.line(
+            plot_df, x="Year", y="Population", color="Country", markers=True,
+            title="Population Over Time"
+        )
+        st.plotly_chart(fig, width='stretch')
 
 # Bar chart: latest year comparison
 if not fdf.empty and "Country" in fdf.columns and "Year" in fdf.columns:
-    latest_year = int(fdf["Year"].max())
-    latest_df = fdf[fdf["Year"] == latest_year].sort_values("Population", ascending=False)
+    year_series = pd.to_numeric(fdf["Year"], errors="coerce").dropna()
+    if not year_series.empty:
+        latest_year = int(year_series.max())
+    else:
+        latest_year = None
+    latest_df = fdf[pd.to_numeric(fdf["Year"], errors="coerce") == latest_year].sort_values("Population", ascending=False) if latest_year is not None else pd.DataFrame()
     if not latest_df.empty:
         fig2 = px.bar(
             latest_df, x="Country", y="Population",
             title=f"Population by Country (Year {latest_year})"
         )
-        st.plotly_chart(fig2, use_container_width=True)
+        st.plotly_chart(fig2, width='stretch')
 
 # Raw data preview
 with st.expander("Preview Data"):
-    st.dataframe(fdf.head(200), use_container_width=True)
+    st.dataframe(fdf.head(200), width='stretch')
