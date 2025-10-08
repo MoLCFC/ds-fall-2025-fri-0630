@@ -2,23 +2,35 @@ import streamlit as st
 import pandas as pd
 from pathlib import Path
 import os
+import importlib.util
 
 try:
     import plotly.express as px
 except ImportError as e:
     st.error(f"Failed to import Plotly: {e}. Install with `pip install plotly`.")
     st.stop()
+# Detect statsmodels without importing to avoid unresolved-import warnings
+HAS_SM = importlib.util.find_spec("statsmodels") is not None
 
 st.set_page_config(page_title="🎬 MovieLens Dashboard", page_icon="🎬", layout="wide")
 
 @st.cache_data
 def load_movies() -> pd.DataFrame:
     script_dir = Path(os.path.dirname(__file__)).resolve()
-    csv_path = script_dir / "data" / "movie_ratings.csv"
-    if csv_path.exists():
-        df = pd.read_csv(csv_path)
-    else:
-        st.error("data/movie_ratings.csv not found. Please place it under app data directory.")
+    # Support either app root or data/ subfolder
+    candidates = [
+        script_dir / "movie_ratings.csv",
+        script_dir / "data" / "movie_ratings.csv",
+        script_dir / "movie_ratings_EC.csv",
+        script_dir / "data" / "movie_ratings_EC.csv",
+    ]
+    df = None
+    for p in candidates:
+        if p.exists():
+            df = pd.read_csv(p)
+            break
+    if df is None:
+        st.error("movie_ratings.csv not found. Place it in app folder or data/ subfolder.")
         return pd.DataFrame()
     # Normalize and coerce
     df = df.copy()
@@ -90,7 +102,7 @@ if not fdf.empty and "genres" in fdf.columns:
     if not genre_counts.empty:
         fig = px.bar(genre_counts, x="genre", y="count", title="Genre Count (Filtered)")
         st.plotly_chart(fig, width='stretch')
-    st.dataframe(genre_counts.head(50), use_container_width=False)
+    st.dataframe(genre_counts.head(50), width='content')
 else:
     st.info("No genre data available after filters.")
 
@@ -112,7 +124,7 @@ if not fdf.empty and {"genres", "rating"}.issubset(fdf.columns):
     if not genre_stats.empty:
         fig2 = px.bar(genre_stats, x="genres", y="mean", hover_data=["count"], title=f"Mean Rating by Genre (n>={min_n})", range_y=[1,5])
         st.plotly_chart(fig2, width='stretch')
-    st.dataframe(genre_stats, use_container_width=False)
+    st.dataframe(genre_stats, width='content')
 else:
     st.info("Ratings/genres not available.")
 
@@ -128,7 +140,7 @@ if not fdf.empty and {"year", "rating"}.issubset(fdf.columns):
     if not year_stats.empty:
         fig3 = px.line(year_stats, x="year", y="rating", title="Mean Rating by Release Year")
         st.plotly_chart(fig3, width='stretch')
-    st.dataframe(year_stats.tail(100), use_container_width=False)
+    st.dataframe(year_stats.tail(100), width='content')
 else:
     st.info("Year/rating not available.")
 
@@ -143,9 +155,9 @@ if not fdf.empty and {"title", "rating"}.issubset(fdf.columns):
     top50 = movie_stats.query("count >= 50").sort_values(["mean", "count"], ascending=[False, False]).head(20)
     top150 = movie_stats.query("count >= 150").sort_values(["mean", "count"], ascending=[False, False]).head(20)
     st.write("Top movies (n ≥ 50)")
-    st.dataframe(top50, use_container_width=False)
+    st.dataframe(top50, width='content')
     st.write("Top movies (n ≥ 150)")
-    st.dataframe(top150, use_container_width=False)
+    st.dataframe(top150, width='content')
 else:
     st.info("Missing title or rating column.")
 
@@ -159,11 +171,12 @@ with st.expander("Extra Credit: Rating vs Age by Genre"):
             eg = fdf.assign(genres=fdf["genres"].astype(str).str.split("|")).explode("genres")
             eg = eg[eg["genres"].isin(ec_genres)].dropna(subset=["age", "rating"])
             if not eg.empty:
-                fig4 = px.scatter(eg, x="age", y="rating", color="genres", trendline="ols", opacity=0.3, title="Rating vs Age by Genre")
+                trend = "ols" if HAS_SM else None
+                fig4 = px.scatter(eg, x="age", y="rating", color="genres", trendline=trend, opacity=0.3, title="Rating vs Age by Genre")
                 st.plotly_chart(fig4, width='stretch')
             st.dataframe(
                 eg.groupby(["genres"]).agg(n=("rating","count"), mean=("rating","mean")).reset_index(),
-                use_container_width=False
+                width='content'
             )
         else:
             st.info("Select at least one genre.")
@@ -177,10 +190,11 @@ with st.expander("Extra Credit: Volume vs Mean Rating per Genre"):
         gg = gg[gg["genres"].str.len() > 0]
         gstats = gg.groupby("genres")["rating"].agg(count="count", mean="mean").reset_index()
         if not gstats.empty:
-            fig5 = px.scatter(gstats, x="count", y="mean", text="genres", trendline="ols", title="Ratings Volume vs Mean Rating (Genre)", range_y=[1,5])
+            trend2 = "ols" if HAS_SM else None
+            fig5 = px.scatter(gstats, x="count", y="mean", text="genres", trendline=trend2, title="Ratings Volume vs Mean Rating (Genre)", range_y=[1,5])
             fig5.update_traces(textposition="top center")
             st.plotly_chart(fig5, width='stretch')
-        st.dataframe(gstats.sort_values("count", ascending=False), use_container_width=False)
+        st.dataframe(gstats.sort_values("count", ascending=False), width='content')
     else:
         st.info("Ratings/genres not available.")
 
@@ -190,8 +204,12 @@ with st.expander("Extra Credit: Clean raw genres from movie_ratings_EC.csv"):
     st.code(
         """
 import pandas as pd
-raw = pd.read_csv('data/movie_ratings_EC.csv')
+
+
+raw = pd.read_csv('movie_ratings_EC.csv')
 raw['genres'] = raw['genres'].fillna('')
+
+=
 df_clean = raw.assign(genres=raw['genres'].str.split('|')).explode('genres')
 df_clean = df_clean[df_clean['genres'].str.len() > 0]
 """.strip(),
