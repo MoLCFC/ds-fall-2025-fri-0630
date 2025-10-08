@@ -205,11 +205,11 @@ with st.expander("Extra Credit: Clean raw genres from movie_ratings_EC.csv"):
         """
 import pandas as pd
 
-
+# Load the original EC file (place it under data/)
 raw = pd.read_csv('movie_ratings_EC.csv')
 raw['genres'] = raw['genres'].fillna('')
 
-=
+# Explode pipe-separated genres into rows
 df_clean = raw.assign(genres=raw['genres'].str.split('|')).explode('genres')
 df_clean = df_clean[df_clean['genres'].str.len() > 0]
 """.strip(),
