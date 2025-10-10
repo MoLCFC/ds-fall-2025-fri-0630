@@ -60,7 +60,7 @@ _*Syllabus and topics are subject to change_
 ![More Actions](readme_images/more_actions.png)
 ![VSCode](readme_images/vscode.png)
 
-6. For homework, make a copy of the exercise notebook (don’t edit the original—make your own copy!) and paste it in the `exercises` folder
+6. For homework, make a copy of the exercise notebook (don’t edit the original—make your own copy!) and paste it in the `exercise` folder
 ![Copy](readme_images/copy.png)
 
 7. Name it `firstname-lastname-exercise-week-XX.ipynb`
@@ -70,7 +70,7 @@ _*Syllabus and topics are subject to change_
 9. When you are done, run these commands:
     - `git status` to see your file you need to add
     - `git add` your new file name, should look something like this:
-        - `git add Week-01-Pandas/exercises/Ahmad-Basyouni-exercise-week-01.ipynb`
+        - `git add Week-01-Pandas/exercise/Ahmad-Basyouni-exercise-week-01.ipynb`
     - `git commit -m “your message here”`
     - `git push origin firstname-lastname-week-XX`
   
@@ -90,7 +90,7 @@ _*Syllabus and topics are subject to change_
 
 ## Homework Submission
 - All homework is due at 12:01 PM (noon) the day before the next class
-- Submit GitHub PR links to your completed exercises
+- Submit GitHub PR links to your completed exercise
 # Homework Instructions: How to hand in your HWs.
 __HW assignments can be found in that each weeks README.md file. Open that weeks folder to find assignment__
 
