@@ -11,7 +11,7 @@
 	- Alphabetical order by first name is SCRUM leader for first meeting (next will be next)
 	- Create a project design document if you have not yet. Follow the template [HERE](https://github.com/CUNYTechPrep/ds-fall-2025-fri-0630/blob/main/Week-06-Business-Stats-Analytics/project_design_template.md)
 	- Bookmark this template in your Slack group chat, invite all team members (edit access), Instructor (edit access), and TA (edit access).
-7. Review Homework due next week and how to submit using the **NEW** [HW Submission Sheet](https://docs.google.com/spreadsheets/d/1vS8dL-qa5dXKhBrylpCS-WA_eTbpIo8wt-kN68aZF6Y/edit?gid=0#gid=0)
+7. Review Homework due next week and how to submit using the **NEW** [HW Submission Sheet](https://docs.google.com/spreadsheets/d/1YdhSynT-nOL_UkpDon7vJmy4zE0AU8_ICyFVjSplTLI/edit?usp=sharing)
 8. Reflect on this class in the Slack thread (One thing you learned from today’s class/enjoyed/disliked/wish you saw more of/confused about.)
 
 ---
@@ -24,7 +24,7 @@
 
 # IMPORTANT, FROM NOW ON SUBMIT HOMEWORK ON THIS NEW GOOGLE SHEET!
 
-_Submit them via the new [HW Submssions Sheet](https://docs.google.com/spreadsheets/d/1vS8dL-qa5dXKhBrylpCS-WA_eTbpIo8wt-kN68aZF6Y/edit?gid=0#gid=0)_
+_Submit them via the new [HW Submssions Sheet](https://docs.google.com/spreadsheets/d/1YdhSynT-nOL_UkpDon7vJmy4zE0AU8_ICyFVjSplTLI/edit?usp=sharing)_
 
 **DEADLINE: Thursday, October 16, 2025**
 
