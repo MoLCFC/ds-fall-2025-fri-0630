@@ -4,21 +4,23 @@
 0. Remind me to start recording
 1. Read **Weekly Announcements** + **CTP mentorship program** message
 2. Any job search stories? [Job form](https://docs.google.com/forms/d/e/1FAIpQLSdp18OfCKTkB8ZndsytlQLU3G6gM1qe6JZDhm0LJJcYtFmwNA/viewform?usp=dialog)
-3. Demo of your demo is due Week 10 (Week of Nov 03)
+3. Demo of your demo is due Week 12 (Week of Nov 17)
 4. Demo night is usually a day within the week of 12/8. We do not have the exact day yet, but will let you know when we do.
+   1. Friday Nov 21st: Minimum Viable Project Due (demo of your demo)
+   2. Friday Dec 5th: FULL PROJECT DUE
+   3. Demo Night: Sometime between Dec 8th - Dec 12th
 5. **TA Chat Engagement:** Best Student Awards at end of class [HW pass] ⭐⭐⭐
 6. At end of class, award 2 awards.  **Chat Hero award // Live hero award** 
 7. **Be active live and in chat**
 8. Homework review from Week-08-Regression
-9. Check-In about [Engagement Best Practices](https://docs.google.com/presentation/d/1ovV1kSQBwY5NXKKWPaLhdxN2Df0X-fPLgn1uodu6XC8/edit?usp=sharing)
-10. Decision Trees and Random Forests Lecture: [Google Slides](https://docs.google.com/presentation/d/1FFIcOzdfXsHdQwuBrPCt7ORDvvz3Mud33mdqBqwQK6w/edit?usp=sharing)
-11. Secret Word
-12. Reflect on this class in the Slack thread (One thing you learned from today’s class/enjoyed/disliked/wish you saw more of/confused about.)
-13. Break
-14. Lecture Coding for Week-09-Trees
-15. TEAM Breakout Rooms
-16. Review Homework due next week and remind students on how to submit using the **NEW** [HW Submission Sheet](https://docs.google.com/spreadsheets/d/1YdhSynT-nOL_UkpDon7vJmy4zE0AU8_ICyFVjSplTLI/edit?usp=sharing)
-17. [Survey](https://docs.google.com/forms/d/e/1FAIpQLSc1G0LR017l0MNoiftCKjhRhL2PnQclp7CisTn7kbDddsDINQ/viewform?usp=pp_url&entry.881897878=Week+9+(10/28-10/31)&entry.1581928214=DS+Friday,+6:30-9pm+ET+-+Instructor:+Georgios,+TA:+Jessica+L)
+9.  Decision Trees and Random Forests Lecture: [Google Slides](https://docs.google.com/presentation/d/1Q6K5_Xya0ABGGql_tw5--enopcCovJkC9xjTdTXH4eE/edit?slide=id.g39ae72f06c3_0_0#slide=id.g39ae72f06c3_0_0)
+10. Secret Word
+11. Reflect on this class in the Slack thread (One thing you learned from today’s class/enjoyed/disliked/wish you saw more of/confused about.)
+12. Break
+13. Lecture Coding for Week-09-Trees
+14. TEAM Breakout Rooms
+15. Review Homework due next week and remind students on how to submit using the **NEW** [HW Submission Sheet](https://docs.google.com/spreadsheets/d/1YdhSynT-nOL_UkpDon7vJmy4zE0AU8_ICyFVjSplTLI/edit?usp=sharing)
+16. [Survey](https://docs.google.com/forms/d/e/1FAIpQLSc1G0LR017l0MNoiftCKjhRhL2PnQclp7CisTn7kbDddsDINQ/viewform?usp=pp_url&entry.881897878=Week+9+(10/28-10/31)&entry.1581928214=DS+Friday,+6:30-9pm+ET+-+Instructor:+Georgios,+TA:+Jessica+L)
 
 ---
 
