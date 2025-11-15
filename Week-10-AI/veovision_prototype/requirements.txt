@@ -1,0 +1,5 @@
+gradio
+ultralytics==8.0.25
+ultralyticsplus==0.0.25
+
+
